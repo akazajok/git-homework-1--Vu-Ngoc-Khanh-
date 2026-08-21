@@ -49,3 +49,4 @@ index 8d1c8b6..81bac45 100644
 ### 6. Sự khác biệt giữa git fetch và git pull:
 - **git fetch:** Lệnh này chỉ tải "thông tin" cập nhật từ remote (GitHub) về máy tính để Git nhận biết có sự thay đổi (như báo cáo behind 1 commit). Tuy nhiên, nó **KHÔNG** tự động gộp (merge) sự thay đổi đó vào các file trong Working Directory. Bằng chứng là sau khi chạy `fetch`, file `README.md` trên ổ cứng vẫn chưa có dòng chữ mới.
 - **git pull:** Bản chất của `pull` là sự kết hợp của `fetch` và `merge`. Lệnh này không chỉ tải thông tin về mà còn lập tức gộp mã nguồn mới từ remote vào nhánh hiện tại trên máy. Bằng chứng là sau khi chạy `pull`, file `README.md` trên ổ cứng đã xuất hiện ngay dòng chữ vừa được thêm từ GitHub UI.
+
