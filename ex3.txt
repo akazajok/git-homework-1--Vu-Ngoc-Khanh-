@@ -1,0 +1,147 @@
+# Báo cáo Bài tập - Tuần 3
+
+## PART A
+
+**1. Tạo thư mục ex3 ở home directory:**
+```bash
+cd ~
+mkdir ex3
+```
+
+**2. Đi vào thư mục ex3:**
+```bash
+cd ex3
+```
+
+**3. Tạo 2 thư mục dir1 và dir2:**
+```bash
+mkdir dir1 dir2
+```
+
+**4. Tạo một file rỗng HelloWorld.txt, sau đó copy file đó vào thư mục dir1:**
+```bash
+touch HelloWorld.txt
+cp HelloWorld.txt dir1/
+```
+
+**5. Copy file HelloWorld.txt vào dir1 lại, sử dụng cờ hiển thị cảnh báo ghi đè:**
+```bash
+cp -i HelloWorld.txt dir1/
+```
+
+**6. Đổi tên HelloWorld.txt thành Hi.txt:**
+```bash
+mv HelloWorld.txt Hi.txt
+```
+
+**7. Di chuyển file đó vào dir2:**
+```bash
+mv Hi.txt dir2/
+```
+
+---
+
+## PART B
+
+**1. Tạo 3 hard links cho file Hi.txt trong các thư mục ex3, dir 1, dir 2, đặt tên tất cả là Hi-hard (3 lệnh riêng biệt):**
+```bash
+ln dir2/Hi.txt Hi-hard
+ln dir2/Hi.txt dir1/Hi-hard
+ln dir2/Hi.txt dir2/Hi-hard
+```
+
+**2. Tạo một symbolic link cho Hi.txt trong thư mục ex3, đặt tên là Hi-sym:**
+```bash
+ln -s dir2/Hi.txt Hi-sym
+```
+
+**3. Xóa hard link Hi-hard trong thư mục ex3:**
+```bash
+rm Hi-hard
+```
+
+**4. Xóa file Hi.txt:**
+```bash
+rm dir2/Hi.txt
+```
+
+**5. Copy kết quả đầu ra khi chạy lệnh ls -li tại đây:**
+```bash
+ls -li
+# total 8
+# 1234567 drwxr-xr-x 2 user user 4096 Oct 25 10:00 dir1
+# 1234568 drwxr-xr-x 2 user user 4096 Oct 25 10:00 dir2
+# 1234571 lrwxrwxrwx 1 user user   11 Oct 25 10:05 Hi-sym -> dir2/Hi.txt
+```
+
+---
+
+## PART C
+
+**1. Liệt kê tất cả các file trong /bin và /usr/bin kết hợp, sắp xếp theo bảng chữ cái, xóa trùng lặp và đếm số lượng tên chương trình duy nhất:**
+```bash
+ls /bin /usr/bin | sort | uniq | wc -l
+```
+
+**2. Từ danh sách đã sắp xếp, xóa trùng lặp, tìm mọi tên chương trình chứa chuỗi "zip" và chỉ in những tên đó:**
+```bash
+ls /bin /usr/bin | sort | uniq | grep "zip"
+```
+
+**3. Tạo một file text với ít nhất 30 dòng và in 5 dòng đầu, 5 dòng cuối, đếm tổng số dòng, từ và byte:**
+```bash
+# Tạo file với 30 dòng
+seq 1 30 > mytext.txt
+
+# Chỉ in 5 dòng đầu tiên
+head -n 5 mytext.txt
+
+# Chỉ in 5 dòng cuối cùng
+tail -n 5 mytext.txt
+
+# Đếm tổng số dòng, từ và byte trong file
+wc mytext.txt
+```
+
+**4. Liệt kê một thư mục, lưu toàn bộ danh sách vào full_listing.txt thông qua tee để đồng thời hiển thị trên màn hình:**
+```bash
+ls -l | tee full_listing.txt
+```
+
+---
+
+## PART D
+
+**1. Tạo thư mục permissions, bên trong tạo ba file secret.txt, shared.txt, public.txt và thiết lập quyền bằng octal notation:**
+```bash
+mkdir permissions
+cd permissions
+touch secret.txt shared.txt public.txt
+
+# secret.txt → owner có quyền read/write, không ai khác có quyền truy cập.
+chmod 600 secret.txt
+
+# shared.txt → owner và group có quyền read/write, others chỉ có quyền read.
+chmod 664 shared.txt
+
+# public.txt → mọi người đều có quyền read, write và execute.
+chmod 777 public.txt
+```
+
+**2. Kiểm tra giá trị umask hiện tại, tạo một file mới, chạy ls -l và giải thích tại sao file mới có quyền đó:**
+```bash
+# Kiểm tra umask
+umask
+
+# Tạo file mới và kiểm tra quyền
+touch newfile.txt
+ls -l newfile.txt
+```
+
+**Giải thích:**
+Cơ chế `umask` (User file-creation mode mask) quyết định những quyền mặc định nào sẽ bị "khấu trừ" đi khi bạn tạo một file hoặc thư mục mới trong Linux. 
+
+- Mặc định, quyền khởi tạo tối đa của một file văn bản (không phải file thực thi) là `666` (tương ứng với `rw-rw-rw-`).
+- Khi bạn dùng lệnh `umask`, hệ thống thường sẽ trả về một giá trị như `0022`. 
+- Hệ điều hành sẽ lấy quyền tối đa trừ đi giá trị umask này: `666 - 022 = 644`. 
+- Vì vậy, khi tạo file `newfile.txt`, lệnh `ls -l` sẽ hiển thị quyền là `-rw-r--r--`. Điều này có nghĩa là chủ sở hữu (owner) có quyền đọc và ghi, trong khi nhóm (group) và những người dùng khác (others) chỉ có quyền đọc.
